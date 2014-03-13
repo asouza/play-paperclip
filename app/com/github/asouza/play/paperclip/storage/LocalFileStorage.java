@@ -8,10 +8,12 @@ import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 
+import play.Configuration;
 import play.Logger;
-import controllers.routes;
 
 public class LocalFileStorage implements FileStorage {
+	
+	private String assetsUrl = Configuration.root().getString("play_paperclip.assets_url");
 
 	@Override
 	public String store(InputStream is, String path, String contentTypeOf) {
@@ -23,7 +25,7 @@ public class LocalFileStorage implements FileStorage {
 	}
 
 	private String urlFor(String path) {
-		return routes.Assets.at("images/" + path).url();
+		return assetsUrl + "/" + path;
 	}
 
 	private void copy(InputStream is, File dest) {

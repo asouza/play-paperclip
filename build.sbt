@@ -4,6 +4,8 @@ version := "1.0-SNAPSHOT"
 
 resolvers += Resolver.sonatypeRepo("releases")
 
+organization := "com.github.asouza.play"
+
 libraryDependencies ++= Seq(
   javaJdbc,
   javaEbean,
