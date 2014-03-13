@@ -1,18 +1,20 @@
 package com.github.asouza.play.paperclip;
 
-import static org.apache.commons.io.FilenameUtils.getExtension;
-
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FilenameUtils;
+
+import play.mvc.Http.MultipartFormData.FilePart;
+
+import com.github.asouza.play.paperclip.storage.FileStorage;
+
+import static org.apache.commons.io.FilenameUtils.getExtension;
 
 
 public class UploadedImage {
@@ -21,30 +23,26 @@ public class UploadedImage {
 
 	private FileStorage storage;
 
-	private File uploadedFile;
+	private FilePart uploadedFile;
 
 	private long timestamp;
 
-	public UploadedImage(BufferedImage image, FileStorage storage, File uploadedFile) {
+	public UploadedImage(BufferedImage image, FileStorage storage, FilePart uploadedFile) {
 		this.image = image;
 		this.storage = storage;
 		this.uploadedFile = uploadedFile;
 		this.timestamp = System.nanoTime();
 	}
 
-	public File getUploadedFile() {
-		return uploadedFile;
-	}
-	
-	public URL save(String folder) {
-		String filename = timestampedName();
-		InputStream is = imageToInputStream(folder);
-		return storage.store(is, folder, contentTypeOf(filename));
+	public String save(String folder) {
+		String fileName = folder+"/"+timestampedName();
+		InputStream is = imageToInputStream(fileName);
+		return storage.store(is, fileName, contentTypeOf(fileName));
 	}
 
 	private String timestampedName() {
-		String extension = FilenameUtils.getExtension(uploadedFile.getName());
-		String name = FilenameUtils.getBaseName(uploadedFile.getName());
+		String extension = FilenameUtils.getExtension(uploadedFile.getFilename());
+		String name = FilenameUtils.getBaseName(uploadedFile.getFilename());
 		return name + "_" + timestamp + "."+extension;
 	}
 

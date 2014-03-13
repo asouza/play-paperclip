@@ -6,6 +6,8 @@ import java.net.URL;
 import com.github.asouza.play.paperclip.crop.CenteredCrop;
 import com.github.asouza.play.paperclip.crop.CropOperation;
 import com.github.asouza.play.paperclip.crop.DefaultImageCropper;
+import com.github.asouza.play.paperclip.storage.FileStorage;
+import com.github.asouza.play.paperclip.storage.LocalFileStorage;
 
 import play.Application;
 import play.Logger;
@@ -35,14 +37,7 @@ public class PaperClipPlugin implements Plugin{
 	}
 
 	public FileStorage storage() {
-		return new FileStorage() {
-			
-			@Override
-			public URL store(InputStream is, String path, String contentTypeOf) {
-				Logger.info("Saving file in "+path);
-				return null;
-			}
-		};
+		return new LocalFileStorage();
 	}
 
 	public UploadedImage centeredCrop(UploadedImage image, int width, int height) {

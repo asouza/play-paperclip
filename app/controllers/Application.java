@@ -14,8 +14,8 @@ public class Application extends Controller {
     public static Result index() {
     	UploadedImage image = UploadedImageFormatter.toUploadedImage(request(),"cover");
 		UploadedImage croppedImage = plugin.centeredCrop(image,200,200);    
-    	croppedImage.save("covers");
-        return ok("imagem salva");
+    	String url = croppedImage.save("covers");
+        return ok(url);
     }
     
     public static Result uploadForm(){
